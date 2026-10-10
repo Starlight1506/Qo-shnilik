@@ -1,0 +1,46 @@
+# 1-MASALA: Do'stlik grafi va A^2 matritsasi
+
+def mat_kopaytma(A, B):
+    """Ikki kvadrat matritsani ko'paytirish funksiyasi"""
+    n = len(A)
+    natija = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                natija[i][j] += A[i][k] * B[k][j]
+    return natija
+
+# Talabalar ro'yxati:
+odamlar = ["Asadxoja", "Abdulloh", "Sallohiddinga", "Axror"]
+# Indekslar: 0 - Ali, 1 - Vali, 2 - Gani, 3 - Olim
+
+# A - Do'stlik qo'shnilik matritsasi (1 - do'st, 0 - do'st emas)
+# Aloqalar:
+# Asadxoja: Abdulloh va Sallohiddinga do'st
+# Abdulloh: Asadxoja va Sallohiddin bilan do'st
+# Salloxiddin: Asadxoja, Abdulloh va Axror bilan do'st
+# Axror: faqat Sallohiddin bilan do'st
+A = [
+    [0, 1, 1, 0],  # Asadxoja
+    [1, 0, 1, 0],  # Abdulloh
+    [1, 1, 0, 1],  # Salloxiddin
+    [0, 0, 1, 0]   # Axror
+]
+
+# A^2 ni hisoblaymiz (A ni o'ziga ko'paytiramiz)
+A2 = mat_kopaytma(A, A)
+
+print("=== 1-VAZIFA NATIJALARI ===")
+print("A (Do'stlik matritsasi):")
+for qator in A:
+    print(qator)
+
+print("\nA^2 (Umumiy do'stlar matritsasi):")
+for qator in A2:
+    print(qator)
+
+print("\n--- Juftliklar bo'yicha umumiy do'stlar soni ---")
+n = len(odamlar)
+for i in range(n):
+    for j in range(i + 1, n):
+        print(f"{odamlar[i]} va {odamlar[j]} orasidagi umumiy do'stlar: {A2[i][j]} ta")
