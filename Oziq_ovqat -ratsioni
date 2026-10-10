@@ -1,0 +1,36 @@
+# 2-MASALA: Optimal ratsionni hisoblash
+# Kerakli kutubxona: pip install scipy
+
+from scipy.optimize import linprog
+
+# 1. Maqsad funksiyasi koeffitsiyentlari (narxlar: so'mda)
+# f(x) = 2000*x1 + 3000*x2 + 8000*x3 -> min
+c = [2000, 3000, 8000]
+
+# 2. Cheklovlar matritsasi (A_ub * x <= b_ub shakliga keltiramiz)
+# Bizning shart:
+# Kaloriya: 75*x1 + 130*x2 + 165*x3 >= 1800  =>  -75*x1 - 130*x2 - 165*x3 <= -1800
+# Oqsil:      6*x1 +   3*x2 +  31*x3 >= 70    =>   -6*x1 -   3*x2 -  31*x3 <= -70
+A_ub = [
+    [-75, -130, -165],  # Kaloriya cheklovi
+    [-6,    -3,  -31]   # Oqsil cheklovi
+]
+
+b_ub = [-1800, -70]
+
+# 3. O'zgaruvchilar chegarasi (miqdorlar 0 dan kam bo'lishi mumkin emas)
+chegaralar = [(0, None), (0, None), (0, None)]
+
+# Chiziqli dasturlash masalasini yechamiz
+natija = linprog(c, A_ub=A_ub, b_ub=b_ub, bounds=chegaralar, method='highs')
+
+print("\n=== 2-VAZIFA NATIJALARI ===")
+if natija.success:
+    x1, x2, x3 = natija.x
+    print(f"Minimal kunlik xarajat: {natija.fun:.2f} so'm")
+    print(f"Tavsiya etilgan porsiyalar:")
+    print(f" - Tuxum: {x1:.2f} dona")
+    print(f" - Guruch (100 g birlikda): {x2:.2f} ta ({x2 * 100:.1f} g)")
+    print(f" - Tovuq filesi (100 g birlikda): {x3:.2f} ta ({x3 * 100:.1f} g)")
+else:
+    print("Yechim topilmadi.")
